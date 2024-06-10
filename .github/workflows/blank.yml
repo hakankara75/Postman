@@ -34,7 +34,7 @@ jobs:
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
       - name: Login to Postman CLI
-        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+        run: postman login --with-api-key ${{ secrets.hakan }}
       - name: Run API tests
         run: |
           postman collection run "${{ github.workspace }}/postman/collections/hakan.json" -e "27548764-2069adb0-ca46-440a-abeb-bff22e9f8a3e"
