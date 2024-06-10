@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "a827c324-5f4d-49b7-bb56-9bcdbadd134f",
+		"name": "hakan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "27548764-a827c324-5f4d-49b7-bb56-9bcdbadd134f"
+	},
+	"item": [
+		{
+			"name": "GET bookingid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21376a94-6b5b-49cf-8b4e-ab4297d5c9d4",
+						"exec": [
+							"console.log(\"Status code is 200\");\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"console.log(\"Response bir değişkene atandı\");\r",
+							"var response = pm.response.json();\r",
+							"console.log(\"Response Body içindeki bookingid sayısı: \" + Object.keys(response).length)\r",
+							"var bookingidLength = Object.keys(response).length;\r",
+							"\r",
+							"var randomIndex = Math.floor(Math.random() * bookingidLength);\r",
+							"console.log(\"0 ile \" + (bookingidLength - 1) + \" arasında rastgele oluşturulan indeks \" + randomIndex + \" dir.\");\r",
+							"\r",
+							"//body içindeki randomIndex değerine denk gelen item seçtim\r",
+							"var itemAtIndex = response[randomIndex];\r",
+							"\r",
+							"//seçtiğim item value sunu kaydettim.\r",
+							"var bookingId = itemAtIndex.bookingid;\r",
+							"console.log(bookingId)\r",
+							"console.log(\"Response body içindeki \"+randomIndex+\". indeksteki bookingid :\"+ bookingId)\r",
+							"\r",
+							"console.log(\"bookingid değerini collection değişkenine kaydettim\"); \r",
+							"pm.collectionVariables.set(\"storedItem\", bookingId);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1ca8ae1e-168d-4607-87e7-a555ddabe824",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "f75f7f99-688c-4c3f-9166-2cd54a6331e9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostBooking",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "47160696-3774-4f1c-89c8-a6d7a2775b3c",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "45605985-d542-4f65-a1fa-d935f787f6e2",
+						"exec": [
+							"var jsonData=pm.response.json()\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    console.log(\"Status code test is executed\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains bookingid\", function () {\r",
+							"    pm.expect(jsonData).to.have.property('bookingid');\r",
+							"    console.log(\"Bookingid presence test is executed\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Firstname is correct\", function () {\r",
+							"    pm.expect(jsonData.booking.firstname).to.eql(\"Merve\");\r",
+							"    console.log(\"Firstname test is executed\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Lastname is correct\", function () {\r",
+							"    pm.expect(jsonData.booking.lastname).to.eql(\"Kara\");\r",
+							"    console.log(\"Lastname test is executed\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Total price is correct\", function () {\r",
+							"    pm.expect(jsonData.booking.totalprice).to.eql(75);\r",
+							"    console.log(\"Total price test is executed\");\r",
+							"});\r",
+							"\r",
+							"var bookingId=pm.response.json().bookingid\r",
+							"console.log(\"bookingid değerini collection değişkenine kaydettim\");\r",
+							"pm.collectionVariables.set(\"createdBookingId\", bookingId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "388404f3-c9f9-4706-b7a1-d4a68f03b83b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\" : \"Merve\",\r\n    \"lastname\" : \"Kara\",\r\n    \"totalprice\" : 75,\r\n    \"depositpaid\" : true,\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"2024-01-01\",\r\n        \"checkout\" : \"2024-01-07\"\r\n    },\r\n    \"additionalneeds\" : \"Ice cream 2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/booking/{{storedItem}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"booking",
+						"{{storedItem}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET createdBookingId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "37f863c3-3796-417b-99ec-b3c6fb0a22fa",
+						"exec": [
+							"  var jsonData = pm.response.json();\r",
+							"  var expectedText=pm.response.text();\r",
+							"console.log(\"verify Status code is 200\")\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"console.log(\"Status is OK\")\r",
+							"pm.test(\"response equals OK\", function () {\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"});\r",
+							"\r",
+							"console.log(\"verify firstname name is Merve\")\r",
+							"pm.test(\"verify firstname name is Merve\", function () {\r",
+							" \r",
+							"    pm.expect(jsonData.firstname).to.contains(\"Merve\");\r",
+							"});\r",
+							"\r",
+							"console.log(\"verify Last name is Kara\")\r",
+							"pm.test(\"verify Last name is Kara\", function () {\r",
+							"   \r",
+							"    pm.expect(jsonData.lastname).to.eql(\"Kara\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"console.log(\"verify Check-in date is 2024-01-01\")\r",
+							"pm.test(\"Check-in date is 2024-01-01\", function () {\r",
+							"  \r",
+							"    pm.expect(jsonData.bookingdates.checkin).to.eql(\"2024-01-01\");\r",
+							"});\r",
+							"\r",
+							"console.log(\"Verify response body\")\r",
+							"pm.test(\"Verify response body\", function () {\r",
+							"   const expectedData={\r",
+							"    \"firstname\": \"Merve\",\r",
+							"    \"lastname\": \"Kara\",\r",
+							"    \"totalprice\": 75,\r",
+							"    \"depositpaid\": true,\r",
+							"    \"bookingdates\": {\r",
+							"        \"checkin\": \"2024-01-01\",\r",
+							"        \"checkout\": \"2024-01-07\"\r",
+							"    },\r",
+							"    \"additionalneeds\": \"Ice cream 2\"\r",
+							"}\r",
+							"pm.expect(jsonData).to.eql(expectedData);\r",
+							"});\r",
+							"\r",
+							"console.log(\"Connection header includes 'keep-alive'\")\r",
+							"pm.test(\"CF-Cache-Status header includes 'keep-alive'\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Connection\")).to.include(\"keep-alive\");\r",
+							"});\r",
+							"\r",
+							"console.log(\"Etag is present\")\r",
+							"pm.test(\"Etag is present\", function () {\r",
+							"    pm.response.to.have.header(\"Etag\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"id": "345adc6a-7140-4ae3-a5b4-9244493d1afa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/booking/{{createdBookingId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"booking",
+						"{{createdBookingId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
